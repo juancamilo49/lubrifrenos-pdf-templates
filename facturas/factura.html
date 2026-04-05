@@ -4,103 +4,158 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Factura {{factura_numero}}</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      font-size: 13px;
-      color: #1a1a2e;
-      background: #fff;
-      padding: 40px 50px;
+    :root {
+      --clr-maroon: #6b1d1d;
+      --clr-maroon-dark: #4e1414;
+      --clr-green: #2e6b34;
+      --clr-grey: #4a4a4a;
+      --clr-grey-light: #f5f5f5;
+      --ink: #111111;
+      --ink-soft: #4a4a4a;
+      --muted: #727272;
+      --line: #dfdfdf;
+      --paper: #ffffff;
+      --panel: #f8f8f8;
+      --ok-bg: #dcfce7;
+      --ok-text: #166534;
+      --warn-bg: #fff4d6;
+      --warn-text: #9a5b00;
     }
 
-    /* HEADER */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    @page {
+      size: A4;
+      margin: 18mm 14mm;
+    }
+
+    body {
+      font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-size: 12px;
+      color: var(--ink);
+      background: var(--paper);
+      line-height: 1.5;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .invoice-sheet {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+
+    .header-band {
+      height: 8px;
+      background: linear-gradient(90deg, var(--clr-maroon-dark) 0%, var(--clr-maroon) 72%, var(--clr-green) 100%);
+    }
+
+    .content {
+      padding: 24px 28px 22px;
+    }
+
     .header {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      margin-bottom: 36px;
-      padding-bottom: 24px;
-      border-bottom: 3px solid #e63946;
+      gap: 24px;
+      margin-bottom: 22px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--line);
     }
 
-    .brand .logo-text {
-      font-size: 22px;
-      font-weight: 700;
-      color: #e63946;
-      letter-spacing: -0.5px;
+    .brand img {
+      height: 56px;
+      display: block;
+      margin-bottom: 6px;
     }
 
     .brand .tagline {
-      font-size: 11px;
-      color: #6b7280;
-      margin-top: 2px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.7px;
+      text-transform: uppercase;
+      color: var(--muted);
     }
 
     .invoice-meta {
+      min-width: 290px;
       text-align: right;
     }
 
     .invoice-meta .invoice-title {
-      font-size: 28px;
-      font-weight: 700;
-      color: #1a1a2e;
-      letter-spacing: -1px;
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      color: var(--clr-maroon);
+      line-height: 1;
     }
 
     .invoice-meta table {
-      margin-top: 8px;
-      margin-left: auto;
+      width: 100%;
+      margin-top: 10px;
+      border-collapse: collapse;
     }
 
     .invoice-meta td {
-      padding: 2px 0 2px 16px;
-      font-size: 12px;
+      padding: 3px 0;
+      font-size: 11px;
+      vertical-align: top;
     }
 
     .invoice-meta td:first-child {
-      color: #6b7280;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 600;
+      width: 45%;
       text-align: right;
+      padding-right: 12px;
     }
 
     .invoice-meta td:last-child {
-      font-weight: 600;
+      font-weight: 700;
+      color: var(--ink);
+      width: 55%;
       text-align: left;
     }
 
-    .badge-pagado {
+    .badge-pagado,
+    .badge-pendiente {
       display: inline-block;
-      background: #d1fae5;
-      color: #065f46;
-      font-size: 11px;
-      font-weight: 600;
-      padding: 2px 10px;
-      border-radius: 20px;
-      margin-top: 6px;
+      margin-top: 8px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      padding: 4px 11px;
+      border-radius: 999px;
+    }
+
+    .badge-pagado {
+      background: var(--ok-bg);
+      color: var(--ok-text);
     }
 
     .badge-pendiente {
-      display: inline-block;
-      background: #fef3c7;
-      color: #92400e;
-      font-size: 11px;
-      font-weight: 600;
-      padding: 2px 10px;
-      border-radius: 20px;
-      margin-top: 6px;
+      background: var(--warn-bg);
+      color: var(--warn-text);
     }
 
-    /* PARTES */
     .parties {
       display: flex;
-      gap: 40px;
-      margin-bottom: 32px;
+      gap: 18px;
+      margin-bottom: 16px;
     }
 
     .party {
       flex: 1;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 14px 16px;
+      background: var(--panel);
     }
 
     .party-label {
@@ -108,164 +163,212 @@
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 1px;
-      color: #e63946;
+      color: var(--clr-green);
       margin-bottom: 8px;
     }
 
     .party-name {
-      font-size: 15px;
-      font-weight: 600;
+      font-size: 14px;
+      font-weight: 700;
       margin-bottom: 4px;
+      color: var(--ink);
     }
 
     .party p {
-      font-size: 12px;
-      color: #4b5563;
-      line-height: 1.6;
+      font-size: 11px;
+      color: var(--ink-soft);
+      line-height: 1.55;
     }
 
-    /* VEHÍCULO */
     .vehicle-box {
-      background: #f9fafb;
-      border: 1px solid #e5e7eb;
-      border-radius: 8px;
-      padding: 14px 18px;
-      margin-bottom: 28px;
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--clr-maroon);
+      border-radius: 10px;
+      background: var(--panel);
+      margin-bottom: 18px;
+      padding: 12px 14px;
       display: flex;
-      gap: 32px;
       align-items: center;
+      gap: 20px;
+    }
+
+    .vehicle-box .placa-badge {
+      background: var(--ink);
+      color: #fff;
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      border-radius: 6px;
+      padding: 7px 14px;
+      min-width: 132px;
+      text-align: center;
+    }
+
+    .vehicle-box .meta {
+      flex: 1;
+      min-width: 0;
     }
 
     .vehicle-box .v-label {
-      font-size: 10px;
+      font-size: 9px;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 1px;
-      color: #6b7280;
+      letter-spacing: 0.8px;
+      color: var(--muted);
       margin-bottom: 2px;
     }
 
     .vehicle-box .v-value {
-      font-size: 13px;
-      font-weight: 600;
-      color: #1a1a2e;
-    }
-
-    .vehicle-box .placa-badge {
-      background: #1a1a2e;
-      color: #fff;
-      font-size: 16px;
+      font-size: 12px;
       font-weight: 700;
-      padding: 6px 18px;
-      border-radius: 6px;
-      letter-spacing: 2px;
+      color: var(--ink);
     }
 
-    /* TABLA SERVICIOS */
     table.items {
       width: 100%;
       border-collapse: collapse;
-      margin-bottom: 24px;
+      margin-bottom: 16px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      overflow: hidden;
     }
 
     table.items thead tr {
-      background: #1a1a2e;
+      background: var(--clr-maroon);
       color: #fff;
     }
 
     table.items thead th {
-      padding: 10px 14px;
-      font-size: 11px;
-      font-weight: 600;
+      padding: 9px 10px;
+      font-size: 10px;
+      font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.7px;
       text-align: left;
     }
 
     table.items thead th.right { text-align: right; }
 
     table.items tbody tr {
-      border-bottom: 1px solid #f3f4f6;
+      border-bottom: 1px solid var(--line);
+      page-break-inside: avoid;
     }
 
     table.items tbody tr:nth-child(even) {
-      background: #f9fafb;
+      background: #fafbfd;
     }
 
     table.items tbody td {
-      padding: 10px 14px;
-      font-size: 12px;
+      padding: 9px 10px;
+      font-size: 11px;
+      color: var(--ink-soft);
       vertical-align: top;
     }
 
-    table.items tbody td.right { text-align: right; }
-    table.items tbody td.center { text-align: center; }
+    table.items tbody td.right { text-align: right; font-weight: 600; }
+    table.items tbody td.center { text-align: center; font-weight: 600; }
 
-    .item-desc { font-weight: 500; }
-    .item-sub  { font-size: 11px; color: #6b7280; margin-top: 2px; }
+    .item-desc {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 2px;
+    }
 
-    /* TOTALES */
+    .item-sub {
+      font-size: 10px;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
     .totals-wrap {
       display: flex;
       justify-content: flex-end;
-      margin-bottom: 32px;
+      margin-bottom: 18px;
     }
 
     .totals {
-      width: 260px;
+      width: 300px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px 14px;
+      background: var(--panel);
     }
 
     .totals .row {
       display: flex;
       justify-content: space-between;
-      padding: 6px 0;
-      font-size: 13px;
-      border-bottom: 1px solid #f3f4f6;
+      padding: 5px 0;
+      font-size: 11px;
+      border-bottom: 1px dashed #d9dee8;
+    }
+
+    .totals .row .label {
+      color: var(--ink-soft);
+      font-weight: 600;
+    }
+
+    .totals .row span:last-child {
+      font-weight: 700;
+      color: var(--ink);
     }
 
     .totals .row.total {
       border-bottom: none;
-      border-top: 2px solid #1a1a2e;
-      margin-top: 4px;
-      padding-top: 10px;
-      font-size: 16px;
-      font-weight: 700;
-      color: #1a1a2e;
+      border-top: 2px solid var(--clr-maroon);
+      margin-top: 6px;
+      padding-top: 8px;
+      font-size: 15px;
     }
 
-    .totals .row .label { color: #6b7280; }
-    .totals .row.total .label { color: #1a1a2e; }
+    .totals .row.total .label,
+    .totals .row.total span:last-child {
+      color: var(--clr-maroon);
+      font-weight: 800;
+    }
 
-    /* NOTAS Y FOOTER */
     .notes {
-      background: #fff8f1;
-      border-left: 4px solid #e63946;
-      padding: 12px 16px;
-      border-radius: 0 6px 6px 0;
-      margin-bottom: 32px;
-      font-size: 12px;
-      color: #4b5563;
+      border: 1px solid #d8e6da;
+      background: linear-gradient(180deg, #f3faf4 0%, #fff 100%);
+      border-radius: 10px;
+      padding: 11px 13px;
+      margin-bottom: 16px;
+      font-size: 11px;
+      color: var(--ink-soft);
       line-height: 1.6;
+      page-break-inside: avoid;
     }
 
-    .notes strong { color: #1a1a2e; }
+    .notes strong {
+      color: var(--clr-green);
+      font-weight: 700;
+    }
 
     .footer {
+      border-top: 1px solid var(--line);
+      padding-top: 11px;
       text-align: center;
-      font-size: 11px;
-      color: #9ca3af;
-      padding-top: 20px;
-      border-top: 1px solid #e5e7eb;
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.2px;
+    }
+
+    .footer strong {
+      color: var(--clr-maroon);
+      font-weight: 700;
     }
   </style>
 </head>
 <body>
 
+  <div class="invoice-sheet">
+    <div class="header-band"></div>
+    <div class="content">
+
   <!-- HEADER -->
   <div class="header">
     <div class="brand">
-        <img src="https://raw.githubusercontent.com/juancamilo49/lubrifrenos-pdf-templates/main/assets/logo.jpeg"
-       style="height: 50px;" alt="Lubrifrenos Nacional">
+      <img src="https://raw.githubusercontent.com/juancamilo49/lubrifrenos-pdf-templates/main/assets/logo.jpeg" alt="Lubrifrenos Nacional">
       <div class="tagline">Servicio automotriz especializado</div>
     </div>
     <div class="invoice-meta">
@@ -294,10 +397,10 @@
       <div class="party-label">De</div>
       <div class="party-name">Lubrifrenos Nacional</div>
       <p>
-        NIT: 900.123.456-7<br>
-        Calle 45 # 23-10, Medellín<br>
-        Tel: (604) 123-4567<br>
-        contacto@lubrifrenosnacional.com
+        NIT: 902.004.562<br>
+        Dg. 52 #10-177, Bello, Antioquia<br>
+        Tel: 305-253-8899<br>
+        lubrifrenosnacionalsas@gmail.com
       </p>
     </div>
     <div class="party">
@@ -315,15 +418,15 @@
   <!-- VEHÍCULO -->
   <div class="vehicle-box">
     <div class="placa-badge">{{vehiculo_placa}}</div>
-    <div>
+    <div class="meta">
       <div class="v-label">Vehículo</div>
       <div class="v-value">{{vehiculo_marca}} {{vehiculo_modelo}} {{vehiculo_anio}}</div>
     </div>
-    <div>
+    <div class="meta">
       <div class="v-label">Kilometraje</div>
       <div class="v-value">{{vehiculo_km}} km</div>
     </div>
-    <div>
+    <div class="meta">
       <div class="v-label">Próximo cambio</div>
       <div class="v-value">{{proximo_cambio_km}} km</div>
     </div>
@@ -385,7 +488,10 @@
 
   <!-- FOOTER -->
   <div class="footer">
-    Lubrifrenos Nacional · NIT 900.123.456-7 · lubrifrenosnacional.com · Generado el {{factura_fecha}}
+    <strong>Lubrifrenos Nacional S.A.S</strong> · NIT 902.004.562 · lubrifrenosnacional.com · Generado el {{factura_fecha}}
+  </div>
+
+    </div>
   </div>
 
 </body>
